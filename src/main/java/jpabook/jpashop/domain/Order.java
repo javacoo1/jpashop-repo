@@ -28,10 +28,10 @@ public class Order {
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
-    private LocalDateTime orderdate; //주문시간
+    private LocalDateTime orderdate; //注文時間
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus status; //주문상태 [ORDER, CANCEL]
+    private OrderStatus status; //注文状態 [ORDER, CANCEL]
 
     //==相関メソッド==//
     public void setMember(Member member) {
@@ -47,5 +47,43 @@ public class Order {
     public void setDelivery(Delivery delivery) {
         this.delivery = delivery;
         delivery.setOrder(this);
+    }
+
+    //==生成メソッド==//
+    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+        Order order = new Order();
+        order.setMember(member);
+        order.setDelivery(delivery);
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+        order.setStatus(OrderStatus.ORDER);
+        order.setOrderdate(LocalDateTime.now());
+        return order;
+    }
+
+    //==ビジネスロジック==//
+    /**
+     * 注文キャンセル
+     */
+    public void cancel() {
+        if (delivery.getStatus() == DeliveryStatus.COMP) {
+            throw new IllegalStateException("すでに配送が終わった商品はキャンセルできません。");
+        }
+
+        this.setStatus(OrderStatus.CANCEL);
+        for (OrderItem orderItem : orderItems) {
+            orderItem.cancel();
+        }
+    }
+
+    //==照会ロジック==//
+    /**
+     * 注文商品の全ての価格を照会
+     */
+    public int getTotalPrice() {
+        return orderItems.stream()
+                .mapToInt(OrderItem::getTotalPrice)
+                .sum();
     }
 }

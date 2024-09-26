@@ -22,6 +22,30 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    private int orderPrice; //주문 당시 가격
-    private int count; //주문 수량
+    private int orderPrice; //注文当時の価格
+    private int count; //注文数量
+
+    //==生成メソッド==//
+    public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setItem(item);
+        orderItem.setOrderPrice(orderPrice);
+        orderItem.setCount(count);
+
+        item.removeStock(count);
+        return orderItem;
+    }
+
+    //==ビジネスロジック==//
+    public void cancel() {
+        getItem().addStock(count);
+    }
+
+    //==照会ロジック==//
+    /**
+     * 注文商品の全ての価格を照会
+     */
+    public int getTotalPrice() {
+        return getOrderPrice() * getCount();
+    }
 }
