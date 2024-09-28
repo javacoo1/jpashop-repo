@@ -33,7 +33,7 @@ public class MemberService {
     }
 
     //会員照会
-    public List<Member> findMember() {
+    public List<Member> findMembers() {
         return memberRepository.findAll();
     }
 
