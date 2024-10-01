@@ -25,41 +25,41 @@ public class OrderService {
     private final ItemRepository itemRepository;
 
     /**
-     * 주문
+     * 注文
      */
     @Transactional
     public Long order(Long memberId, Long itemId, int count) {
 
-        //entity조회
+        //entity照会
         Member member = memberRepository.findOne(memberId);
         Item item = itemRepository.findOne(itemId);
 
-        //배송정보 생성
+        //配送情報生成
         Delivery delivery = new Delivery();
         delivery.setAddress(member.getAddress());
 
-        //주문상품 생성
+        //注文商品生成
         OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), count);
 
-        //주문 생성
+        //注文生成
         Order order = Order.createOrder(member, delivery, orderItem);
 
-        //주문 저장
+        //注文保存
         orderRepository.save(order);
         return order.getId();
     }
     /**
-     * 주문 취소
+     * 注文キャンセル
      */
     @Transactional
     public void cancelOrder(Long orderId) {
-        //주문 entity 조회
+        //注文entity照会
         Order order = orderRepository.findOne(orderId);
-        //주문 취소
+        //注文キャンセル
         order.cancel();
     }
 
-    //검색
+    //検索
 
     public List<Order> findOrders(OrderSearch orderSearch) {
         return orderRepository.findAllByCriteria(orderSearch);
