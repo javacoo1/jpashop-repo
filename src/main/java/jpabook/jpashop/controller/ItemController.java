@@ -47,13 +47,15 @@ public class ItemController {
     public String updateItemForm(@PathVariable("itemId") Long itemId, Model model) {
         Book item = (Book) itemService.findOne(itemId);
 
-        BookForm form = new BookForm();
-        form.setId(item.getId());
-        form.setName(item.getName());
-        form.setPrice(item.getPrice());
-        form.setStockQuantity(item.getStockQuantity());
-        form.setAuthor(item.getAuthor());
-        form.setIsbn(item.getIsnb());
+        //BookForm 객체를 빌더 패턴을 사용해 생성
+        BookForm form = BookForm.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .price(item.getPrice())
+                .stockQuantity(item.getStockQuantity())
+                .author(item.getAuthor())
+                .isbn(item.getIsnb())
+                .build();
 
         model.addAttribute("form", form);
         return "items/updateItemForm";
