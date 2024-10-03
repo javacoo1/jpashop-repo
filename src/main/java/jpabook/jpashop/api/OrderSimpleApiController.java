@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequiredArgsConstructor
-public class OrderSimpleAipController {
+public class OrderSimpleApiController {
 
     private final OrderRepository orderRepository;
 
@@ -57,5 +57,15 @@ public class OrderSimpleAipController {
             orderStatus = order.getStatus();
             address = order.getDelivery().getAddress();
         }
+    }
+
+    @GetMapping("api/v3/simple-orders")
+    public List<SimpleOrderDto> ordersV3() {
+        List<Order> orders = orderRepository.findAllWithMemberDelivery();
+        List<SimpleOrderDto> result = orders.stream()
+                .map(o -> new SimpleOrderDto(o))
+                .collect(Collectors.toList());
+
+        return result;
     }
 }
