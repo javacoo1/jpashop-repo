@@ -50,8 +50,7 @@ public class InitDb {
             OrderItem orderItem1 = OrderItem.createOrderItem(book1, 1000, 1);
             OrderItem orderItem2 = OrderItem.createOrderItem(book2, 2000, 2);
 
-            Delivery delivery = createDelivery(member);
-            Order order = Order.createOrder(member, delivery, orderItem1, orderItem2);
+            Order order = Order.createOrder(member, createDelivery(member), orderItem1, orderItem2);
             em.persist(order);
         }
 
@@ -86,11 +85,11 @@ public class InitDb {
         }
 
         private Book createBook(String name, int price, int stockQuantity) {
-            Book book1 = new Book();
-            book1.setName(name);
-            book1.setPrice(price);
-            book1.setStockQuantity(stockQuantity);
-            return book1;
+            Book book = new Book();
+            book.setName(name);
+            book.setPrice(price);
+            book.setStockQuantity(stockQuantity);
+            return book;
         }
     }
 }
