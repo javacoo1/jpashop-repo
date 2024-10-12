@@ -31,7 +31,7 @@ public class OrderService {
     public Long order(Long memberId, Long itemId, int count) {
 
         //entity照会
-        Member member = memberRepository.findOne(memberId);
+        Member member = memberRepository.findById(memberId).get();
         Item item = itemRepository.findOne(itemId);
 
         //配送情報生成
