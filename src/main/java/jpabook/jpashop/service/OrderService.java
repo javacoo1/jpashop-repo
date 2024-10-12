@@ -60,8 +60,7 @@ public class OrderService {
     }
 
     //検索
-
     public List<Order> findOrders(OrderSearch orderSearch) {
-        return orderRepository.findAllByCriteria(orderSearch);
+        return orderRepository.findAll(orderSearch);
     }
 }
